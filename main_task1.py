@@ -34,7 +34,7 @@ class Record:
     # Метод для видалення номеру телефону
     def remove_phone(self, phone_number):
         for phone in self.phones:
-            if phone.value == Phone(phone_number).value:
+            if phone.value == phone_number:
                 self.phones.remove(phone)
 
     # Метод для редагування номеру телефону
@@ -42,9 +42,11 @@ class Record:
         try:
             for phone in self.phones:
                 if phone.value == old_phone_number:
-                    phone.value = new_phone_number
-        except ValueError:
-            print('Number is not correct!')
+                    phone.value = Phone(new_phone_number).value
+                else:
+                    raise ValueError('Number is not exist')
+        except ValueError as e:
+            return f'{e}'
 
     # Метод для пошуку об'єктів Phone
     def find_phone(self, phone_number):
@@ -53,7 +55,7 @@ class Record:
                 return phone
         return None
 
-    # Магічний метод для красивого виводу об’єкту класу
+ # Магічний метод для красивого виводу об’єкту класу
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(phone.value for phone in self.phones)}"
 
@@ -71,6 +73,18 @@ class AddressBook(UserDict):
     def delete(self, delete_name):
         if delete_name in self.data:
             del self.data[delete_name]
+
+    # Магічний метод для красивого виводу об’єктів класу
+    def __str__(self):
+        if not self.data:
+            return "Address Book is empty."
+
+        result = "Address Book:\n"
+        result += "-" * 40 + "\n"
+        for name, record in self.data.items():
+            result += f"{record}\n"
+            result += "- " * 20 + "\n"
+        return result
 
 
 # Створення нової адресної книги
@@ -90,7 +104,6 @@ jane_record.add_phone("9876543210")
 book.add_record(jane_record)
 
 # Виведення всіх записів у книзі
-
 print(book)
 
 # Знаходження та редагування телефону для John
@@ -105,3 +118,4 @@ print(f"{john.name}: {found_phone}")  # Виведення: John: 5555555555
 
 # Видалення запису Jane
 book.delete("Jane")
+
