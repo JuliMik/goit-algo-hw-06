@@ -39,14 +39,13 @@ class Record:
 
     # Метод для редагування номеру телефону
     def edit_phone(self, old_phone_number, new_phone_number):
-        try:
-            for phone in self.phones:
-                if phone.value == old_phone_number:
-                    phone.value = Phone(new_phone_number).value
-                else:
-                    raise ValueError('Number is not exist')
-        except ValueError as e:
-            return f'{e}'
+        for phone in self.phones:
+            if phone.value == old_phone_number:
+                phone.value = Phone(new_phone_number).value
+                break
+        else:
+            raise ValueError('Number is not exist')
+
 
     # Метод для пошуку об'єктів Phone
     def find_phone(self, phone_number):
@@ -118,4 +117,3 @@ print(f"{john.name}: {found_phone}")  # Виведення: John: 5555555555
 
 # Видалення запису Jane
 book.delete("Jane")
-
